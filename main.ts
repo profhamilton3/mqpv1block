@@ -16,7 +16,6 @@ function doDriveForward (num: number, num2: number) {
 }
 input.onButtonPressed(Button.A, function () {
     music._playDefaultBackground(music.builtInPlayableMelody(Melodies.PowerUp), music.PlaybackMode.InBackground)
-    DFRobotMaqueenPlus.I2CInit()
     basic.showIcon(IconNames.Angry)
     music.play(music.tonePlayable(262, music.beat(BeatFraction.Double)), music.PlaybackMode.InBackground)
 })
@@ -59,3 +58,17 @@ function doDriveBackward (num: number, num2: number) {
 }
 basic.showIcon(IconNames.Asleep)
 music.setVolume(60)
+control.inBackground(function () {
+    DFRobotMaqueenPlus.I2CInit()
+    while (true) {
+        if (15 > DFRobotMaqueenPlus.ultraSonic(PIN.P1, PIN.P2)) {
+            music.play(music.tonePlayable(880, music.beat(BeatFraction.Whole)), music.PlaybackMode.UntilDone)
+            doDriveBackward(100, 1000)
+            DFRobotMaqueenPlus.mototStop(Motors.ALL)
+            doSpinRight(50, 500)
+            DFRobotMaqueenPlus.mototStop(Motors.ALL)
+        } else {
+            basic.pause(100)
+        }
+    }
+})
